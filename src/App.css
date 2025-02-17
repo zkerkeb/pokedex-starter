@@ -11,7 +11,10 @@
 }
 
 .pokemon-card-container{
-  background-color: blue;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.search-bar-container{
+  margin-bottom: 20px;
 }
