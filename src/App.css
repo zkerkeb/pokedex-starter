@@ -2,6 +2,12 @@
   max-width: 1280px;
 }
 
+.app-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .pokemon-list{
 display: flex;
 flex-wrap: wrap;
