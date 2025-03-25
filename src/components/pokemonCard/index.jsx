@@ -1,8 +1,54 @@
 import { useState, useEffect } from "react";
 import "./index.css";
+import axios from "axios";
+import {useNavigate} from "react-router";
 
-const PokemonCard = ({ name, image, types, hp, attack, defense }) => {
+const PokemonCard = ({ name, image, types, hp, attack, defense,id,setPokemons, pokemon }) => {
   const [currentHp, setCurrentHp] = useState(hp);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(name);
+
+  const navigate = useNavigate();
+
+  const goToPokemon = (id) => {
+    navigate(`/pokemon/${id}`);
+  }
+
+  const deletePokemon = (id) => {
+    console.log('suppression du pokemon');
+    console.log(id);
+    axios.delete(`http://localhost:3000/api/pokemons/${id}`).then((response) =>{
+      console.log('pokemon supprimé',response.data);
+      setPokemons(response.data.newPokemonsList)
+    }).catch((error) =>{
+      console.log('erreur lors de la suppression du pokemon',error);
+    })
+  }
+
+   const editPokemon = (id) => {
+    console.log('modification du pokemon');
+    console.log(id);
+    const newPokemon = {
+      ...pokemon,
+      name: {
+        ...pokemon.name,
+        french: editedName,
+      },
+
+    }
+    console.log('newPokemon',newPokemon);
+
+    axios.put(`http://localhost:3000/api/pokemons/${id}`, newPokemon).then((response) =>{
+      console.log('pokemon modifié',response.data);
+      setIsEditing(false);
+      // setPokemons(response.data.newPokemonsList)
+    }).catch((error) =>{
+      alert('Erreur lors de la modification du pokemon');
+      console.log('erreur lors de la modification du pokemon',error);
+    })
+
+
+   }
 
   useEffect(() => {
     // alert('Le combat commence')
@@ -18,7 +64,7 @@ const PokemonCard = ({ name, image, types, hp, attack, defense }) => {
   return (
     <div className="pokemon-card">
       <div className="pokemon-name-container">
-        <span className="pokemon-name">{name}</span>
+        {isEditing ? <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} /> : <span className="pokemon-name">{editedName}</span>}
       </div>
       <img className="pokemon-image" src={image} alt={name} />
 
@@ -41,6 +87,12 @@ const PokemonCard = ({ name, image, types, hp, attack, defense }) => {
       >
         Attack
       </button>
+      <button onClick={() => deletePokemon(id)}>Supprimer</button>
+      <button onClick={() => setIsEditing(!isEditing)}> 
+        {isEditing ? 'Annuler' : 'Modifier'}
+        </button>
+        {isEditing ? <button onClick={() => editPokemon(id)}>Enregistrer</button> : null}
+        <button onClick={() => goToPokemon(id)}>Voir le pokemon</button>
     </div>
   );
 };
