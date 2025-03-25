@@ -1,13 +1,26 @@
 import { useEffect, useState } from 'react'
-import pokemons from './assets/pokemons'
+// import pokemons from './assets/pokemons'
 import PokemonCard from './components/pokemonCard'
 import SearchBar from './components/searchBar'
 import './App.css'
-
+import axios from 'axios'
 
 function App() {
+  const [pokemons, setPokemons] = useState([])
   const [search, setSearch] = useState("")
   const [types, setTypes] = useState([])
+
+  useEffect(() => {
+    axios({
+      method: 'GET',
+      url: 'http://localhost:3000/api/pokemons'
+    }).then((response) => {
+      console.log(response.data)
+    }).catch((error) => {
+      console.log(error)
+    })  
+
+  }, [])
 
   useEffect(() => {
     console.log(search)
