@@ -1,14 +1,23 @@
 import { useState, useEffect } from "react";
 import "./index.css";
-const PokemonCard = ({ name, types, image, attack, defense, hp }) => {
+import {useNavigate} from "react-router"
+
+const PokemonCard = ({ name, types, image, attack, defense, hp,id }) => {
+  console.log("🚀 ~ PokemonCard ~ id:", image)
   const [currentHP, setCurrentHP] = useState(hp);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     // alert("le combat commence")
   }, []);
 
+  const goToPokemon = () => {
+    console.log("🚀 ~ goToPokemon ~ id:", id)
+    navigate(`/pokemon/${id}`)
+  }
+
   useEffect(() => {
-    console.log("currentHP useEffect", currentHP);
     if (currentHP <= 0) {
       alert("bulbizarre est mort");
     }
@@ -35,6 +44,9 @@ const PokemonCard = ({ name, types, image, attack, defense, hp }) => {
         <span>Defense: {defense}</span>
         <span>HP: {currentHP}</span>
       </div>
+      <button onClick={goToPokemon}>
+        Voir pokemon en détail
+      </button>
       {/* <button onClick={handleAttack}>Attack</button> */}
     </div>
   );

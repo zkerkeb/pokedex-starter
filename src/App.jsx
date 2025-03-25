@@ -1,60 +1,10 @@
-import { useEffect, useState } from 'react'
-// import pokemons from './assets/pokemons'
-import PokemonCard from './components/pokemonCard'
-import SearchBar from './components/searchBar'
-import './App.css'
-import axios from 'axios'
+import Home from './screens/home'
+import { RouterProvider } from 'react-router'
+import router from './config/router'
 
-function App() {
-  const [pokemons, setPokemons] = useState([])
-  const [search, setSearch] = useState("")
-  const [types, setTypes] = useState([])
-
-  useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'http://localhost:3000/api/pokemons'
-    }).then((response) => {
-      console.log(response.data)
-    }).catch((error) => {
-      console.log(error)
-    })  
-
-  }, [])
-
-  useEffect(() => {
-    console.log(search)
-    console.log('types', types)
-  }, [search, types])
-
+const App = () => {
   return (
-    <div className="app-container">
-      <SearchBar types={types} setTypes={setTypes} search={search} setSearch={setSearch}/>
-
-    <div className="pokemon-list">
-      {pokemons.map((pokemon) => {
-        const isTypeIncluded = types.length === 0 || types.every(type => pokemon.type.includes(type))
-        const isNameIncluded = search === "" || pokemon.name.french.toLowerCase().includes(search.toLowerCase())
-
-        if(!isNameIncluded || !isTypeIncluded){
-          return null
-        }
-        
-        return (
-          <div key={pokemon.id} className="pokemon-card-container">
-          <PokemonCard 
-          name={pokemon.name.french} 
-          types={pokemon.type} 
-          image={pokemon.imageShiny}
-          attack={pokemon.base.Attack}
-          defense={pokemon.base.Defense}
-          hp={pokemon.base.HP}
-        />
-        </div>
-        )
-      })}
-    </div>
-    </div>
+   <RouterProvider router={router} />
   )
 }
 
